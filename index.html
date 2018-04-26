@@ -27,11 +27,7 @@
 <body>
 
     <h1>Video Game Search</h1>
-
-    <button data-video-game="halo+5">Halo</button>
-    <button data-video-game="gears+of+war">Gears of War</button>
-    <button data-video-game="bioshock">Bioshock</button>
-    <button data-video-game="god+of+war+4">God of War</button>
+    <div id="buttons-view"></div>
 
     <form id="gif-form">
         <label for="gif-input">Add a Gif</label>
@@ -48,47 +44,80 @@
 </body>
 
 <script>
-    $("button").on("click", function () {
-        var videoGame = $(this).attr("data-video-game");
+    var videoGameArr = ["halo 5", "gears of war", "bioshock", "god of war 4"];
 
 
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + videoGame + "&api_key=lokEXiRxZ9E2y5sZj1wWJM6ZN3oDmVuT&limit=10";
+    function displayVideoGameGifs() {
+        $("button").on("click", function () {
+            var videoGame = $(this).attr("data-name");
 
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        }).then(function (response) {
-            console.log(response);
-            console.log("this is our queryURL", queryURL);
-            
-            var results = response.data;
-            
-            for(var i = 0; i < results.length; i++){
-                
-                var $videoGameDiv = $("<div>");
-                
-                var $p = $("<p>").text("Rating: " + results[i].rating);
 
-                var $videoGameImg = $("<img>");
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + videoGame + "&api_key=lokEXiRxZ9E2y5sZj1wWJM6ZN3oDmVuT&limit=10";
 
-                $videoGameImg.attr("src", results[i].images.fixed_height.url);
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function (response) {
+                console.log(response);
+                console.log("this is our queryURL", queryURL);
 
-                $videoGameDiv.append($p);
-                $videoGameDiv.append($videoGameImg);
+                var results = response.data;
 
-                $("#gifs-appear-here").prepend($videoGameDiv);
-            }
-            
+                for (var i = 0; i < results.length; i++) {
+
+                    var $videoGameDiv = $("<div>");
+
+                    var $p = $("<p>").text("Rating: " + results[i].rating);
+
+                    var $videoGameImg = $("<img>");
+
+                    $videoGameImg.attr("src", results[i].images.fixed_height.url);
+
+                    $videoGameDiv.append($p);
+                    $videoGameDiv.append($videoGameImg);
+
+                    $("#gifs-appear-here").prepend($videoGameDiv);
+                }
+
+            });
         });
+    };
+
+    function renderButtons() {
+
+        $("#buttons-view").empty();
+
+        for (var i = 0; i < videoGameArr.length; i++) {
+
+            var a = $("<button>");
+
+            a.addClass("vid-game-btn");
+
+            a.attr("data-name", videoGameArr[i]);
+
+            a.text(videoGameArr[i]);
+
+            $("#buttons-view").append(a);
+        }
+    };
+
+
+    $("#add-gif").on("click", function () {
+        event.preventDefault();
+
+        var $videoGame = $("#gif-input").val().trim();
+
+        videoGameArr.push($videoGame);
+
+        renderButtons();
+
+
     });
 
-    // $("#add-gif").on("click", function(){
-    //     event.preventDefault();
+      $(document).on("click", ".vid-game-btn", displayVideoGameGifs);
 
-    //     var $videoGame = $("#gif-input").val().trim();
+      renderButtons();
 
-
-    // })
 </script>
 
 </html>
