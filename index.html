@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gif page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/Css/style.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/Css/reset.css" />
+
+    <script src="assets/Javascript/javascript.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+    <style type="text/css">
+        button,
+        div,
+        form,
+        input {
+            margin: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Video Game Search</h1>
+
+    <button data-video-game="halo+5">Halo</button>
+    <button data-video-game="gears+of+war">Gears of War</button>
+    <button data-video-game="bioshock">Bioshock</button>
+    <button data-video-game="god+of+war+4">God of War</button>
+
+    <form id="gif-form">
+        <label for="gif-input">Add a Gif</label>
+        <input type="text" id="gif-input">
+        <br>
+
+        <input id="add-gif" type="submit" value="Add a Gif">
+    </form>
+
+
+    <div id="gifs-appear-here"></div>
+
+
+</body>
+
+<script>
+    $("button").on("click", function () {
+        var videoGame = $(this).attr("data-video-game");
+
+
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + videoGame + "&api_key=lokEXiRxZ9E2y5sZj1wWJM6ZN3oDmVuT&limit=10";
+
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+            console.log(response);
+            console.log("this is our queryURL", queryURL);
+            
+            var results = response.data;
+            
+            for(var i = 0; i < results.length; i++){
+                
+                var $videoGameDiv = $("<div>");
+                
+                var $p = $("<p>").text("Rating: " + results[i].rating);
+
+                var $videoGameImg = $("<img>");
+
+                $videoGameImg.attr("src", results[i].images.fixed_height.url);
+
+                $videoGameDiv.append($p);
+                $videoGameDiv.append($videoGameImg);
+
+                $("#gifs-appear-here").prepend($videoGameDiv);
+            }
+            
+        });
+    });
+
+    $("#gif-form").on("click", function(){
+        event.preventDefault();
+    })
+</script>
+
+</html>
