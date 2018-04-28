@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var videoGameArr = ["halo 5", "gears of war", "bioshock", "god of war 4"];
+    var topics = ["Halo 5", "Gears of War 4", "Bioshock Remastered", "God of War 4", "Borderlands", "Borderlands 2", "Fortnite", "PUBG", "Super Mario Odyssey", "Far Cry 5"];
 
     $("#buttons-view").on("click", "button", function (event) {
         event.preventDefault();
@@ -21,36 +21,36 @@ $(document).ready(function () {
             for (var i = 0; i < results.length; i++) {
 
                 var $videoGameDiv = $("<div>");
-                $videoGameDiv.css("float","left");
+                $videoGameDiv.css("float", "left");
                 $videoGameDiv.attr("class", "col-lg=3");
 
                 var $p = $("<p>").text("Rating: " + results[i].rating);
                 $p.css("margin-left", "10px");
-                
+
                 var still = results[i].images.fixed_height_still.url;
                 var active = results[i].images.fixed_height.url;
-                
+
                 var $videoGameImg = $("<img>");
                 $videoGameImg.css("margin", "10px 10px 10px 10px");
-                $videoGameImg.attr({"src": still, "data-state": "still", "data-still": still, "data-animate": active });
+                $videoGameImg.attr({ "src": still, "data-state": "still", "data-still": still, "data-animate": active });
 
                 $videoGameDiv.append($p);
                 $videoGameDiv.append($videoGameImg);
-                
+
                 $("#gifs-appear-here").append($videoGameDiv);
 
-                $videoGameImg.on("click", function() {
+                $videoGameImg.on("click", function () {
                     var state = $(this).attr("data-state");
-            
+
                     if (state === "still") {
-                      $(this).attr("src", $(this).attr("data-animate"));
-                      $(this).attr("data-state", "animate");
+                        $(this).attr("src", $(this).attr("data-animate"));
+                        $(this).attr("data-state", "animate");
                     } else {
-                      $(this).attr("src", $(this).attr("data-still"));
-                      $(this).attr("data-state", "still");
+                        $(this).attr("src", $(this).attr("data-still"));
+                        $(this).attr("data-state", "still");
                     }
-                  });
-            
+                });
+
             }
 
         });
@@ -63,15 +63,17 @@ $(document).ready(function () {
 
         $("#buttons-view").empty();
 
-        for (var i = 0; i < videoGameArr.length; i++) {
+        for (var i = 0; i < topics.length; i++) {
 
             var a = $("<button>");
 
             a.addClass("vid-game-btn");
 
-            a.attr("data-name", videoGameArr[i]);
+            a.attr("data-name", topics[i]);
 
-            a.text(videoGameArr[i]);
+            a.text(topics[i]);
+
+            a.css("margin", "10px");
 
             $("#buttons-view").append(a);
 
@@ -85,15 +87,18 @@ $(document).ready(function () {
 
         var $videoGame = $("#gif-input").val().trim();
 
-        videoGameArr.push($videoGame);
+        topics.push($videoGame);
+
+        $('input[type="text"]').val('');
 
         renderButtons();
 
 
 
 
+
     });
 
-  
+
     renderButtons();
 });
