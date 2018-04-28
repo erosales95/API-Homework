@@ -9,9 +9,10 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="assets/Css/style.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="assets/Css/reset.css" />
-
-    <script src="assets/Javascript/javascript.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous">
     <script src="http://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="assets/Javascript/javascript.js"></script>
 
     <style type="text/css">
         button,
@@ -20,104 +21,54 @@
         input {
             margin: 10px;
         }
+
+        ;
+
+        .flex-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        };
+
+        #gifs-appear-here {
+            padding: 15px;
+        }
     </style>
 
 </head>
 
 <body>
 
-    <h1>Video Game Search</h1>
-    <div id="buttons-view"></div>
+    <h1 class="jumbotron">Video Game Search</h1>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="panel">
+                <div class="panel-body" id="buttons-view">
 
-    <form id="gif-form">
-        <label for="gif-input">Add a Gif</label>
-        <input type="text" id="gif-input">
-        <br>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="panel">
+                <div class="panel-body">
+                    <form id="gif-form">
+                        <label for="gif-input">Add a Gif</label>
+                        <input type="text" id="gif-input">
+                        <br>
 
-        <input id="add-gif" type="submit" value="Add a Gif">
-    </form>
+                        <input id="add-gif" type="submit" value="Add a Gif">
+                    </form>
 
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div id="gifs-appear-here"></div>
-
-
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="flex-container panel-body" id="gifs-appear-here"></div>
+        </div>
+    </div>
 </body>
-
-<script>
-    var videoGameArr = ["halo 5", "gears of war", "bioshock", "god of war 4"];
-
-
-    function displayVideoGameGifs() {
-        $("button").on("click", function () {
-            var videoGame = $(this).attr("data-name");
-
-
-            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + videoGame + "&api_key=lokEXiRxZ9E2y5sZj1wWJM6ZN3oDmVuT&limit=10";
-
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-            }).then(function (response) {
-                console.log(response);
-                console.log("this is our queryURL", queryURL);
-
-                var results = response.data;
-
-                for (var i = 0; i < results.length; i++) {
-
-                    var $videoGameDiv = $("<div>");
-
-                    var $p = $("<p>").text("Rating: " + results[i].rating);
-
-                    var $videoGameImg = $("<img>");
-
-                    $videoGameImg.attr("src", results[i].images.fixed_height.url);
-
-                    $videoGameDiv.append($p);
-                    $videoGameDiv.append($videoGameImg);
-
-                    $("#gifs-appear-here").prepend($videoGameDiv);
-                }
-
-            });
-        });
-    };
-
-    function renderButtons() {
-
-        $("#buttons-view").empty();
-
-        for (var i = 0; i < videoGameArr.length; i++) {
-
-            var a = $("<button>");
-
-            a.addClass("vid-game-btn");
-
-            a.attr("data-name", videoGameArr[i]);
-
-            a.text(videoGameArr[i]);
-
-            $("#buttons-view").append(a);
-        }
-    };
-
-
-    $("#add-gif").on("click", function () {
-        event.preventDefault();
-
-        var $videoGame = $("#gif-input").val().trim();
-
-        videoGameArr.push($videoGame);
-
-        renderButtons();
-
-
-    });
-
-      $(document).on("click", ".vid-game-btn", displayVideoGameGifs);
-
-      renderButtons();
-
-</script>
 
 </html>
